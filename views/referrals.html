@@ -1,0 +1,182 @@
+<div class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Referral History for {{$root.user.last_name}}, {{$root.user.first_name}}</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form ng-submit="load_referrals();" class="form-inline" role="form">
+                <div class="form-group">
+                    <select ng-model="filter.status" class="form-control withrefid">
+                        <option value="1">Accepted</option>
+                        <option value="2">Deferred</option>
+                        <option value="0">Pending</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select ng-model="filter.bed_type" class="form-control withrefid">
+                        <option value="2">Skilled</option>
+                        <option value="3">Medicaid</option>
+                        <option value="4">Medicaid Pending</option>
+                        <option value="5">Charity</option>
+                        <option value="1">Other</option>
+                    </select>
+                </div>
+                <div class="form-group" ng-show="$root.user.is_admin">
+                    <input ng-model="filter.refid" type="text" class="form-control" placeholder="Ref. ID (optional)">
+                </div>
+                <button ng-click="submit();" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Search
+                </button>
+                <a ng-click="clear();" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Clear
+                </a>
+                <div class="form-group">
+                    <span class="text-muted">
+                        &nbsp;&nbsp;
+                        Total Filtered Referrals: <b>{{referrals.length}}</b>&nbsp;
+                    </span>
+                </div>
+            </form>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ref. ID</th>
+                        <th>Referral Date</th>
+                        <th>Referrer</th>
+                        <th colspan="2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="log in referrals">
+                        <td class="text-muted strong">
+                            {{log.id}}
+                        </td>
+                        <td class="text-muted">
+                            {{log.date_logged}}
+                        </td>
+                        <td>
+                            {{log.referring_location}}
+                        </td>
+                        <td class="col-60" colspan="2">
+                            <div ng-switch="log.status">
+                                <div ng-switch-when="1">
+                                    <p class="text-success">
+                                        <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                                        Placement Accepted
+                                    </p>
+                                    <table class="table table-condensed table-bordered table-stats">
+                                        <tbody>
+                                            <tr>
+                                                <td>Date Accepted</td>
+                                                <td>{{log.date_accepted}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Provider</td>
+                                                <td class="strong">
+                                                    <a href="#/provider/{{log.facilities_id}}">{{log.fac_title}}</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Scheduled</td>
+                                                <td>{{log.time_when}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Bed Placement</td>
+                                                <td>{{beds[log.bed_type]}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patient</td>
+                                                <td>
+                                                    {{log.patient}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patient Email</td>
+                                                <td>
+                                                    {{log.email}}
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="log.notes">
+                                                <td>Provider Notes</td>
+                                                <td class="console text-success">
+                                                    {{log.notes}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-switch-when="2">
+                                    <p class="text-danger">
+                                        <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;
+                                        Placement Deferred
+                                    </p>
+                                    <table class="table table-condensed table-bordered table-stats">
+                                        <tbody>
+                                            <tr>
+                                                <td>Date Reviewed</td>
+                                                <td>{{log.date_reviewed}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Facility</td>
+                                                <td class="strong">
+                                                    <a href="#/provider/{{log.facilities_id}}">{{log.fac_title}}</a>
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="log.notes">
+                                                <td>Provider Notes</td>
+                                                <td class="console text-danger">
+                                                    {{log.notes}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-switch-when="0">
+                                    <p class="text-warning">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;
+                                        Pending Provider Review
+                                    </p>
+                                    <table class="table table-condensed table-bordered table-stats">
+                                        <tbody>
+                                            <tr>
+                                                <td>Provider</td>
+                                                <td class="strong">
+                                                    <a href="#/provider/{{log.facilities_id}}">{{log.fac_title}}</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Placement Needed</td>
+                                                <td>{{beds[log.bed_type]}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patient</td>
+                                                <td>
+                                                    {{log.patient}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Actions</td>
+                                                <td class="">
+                                                    <a ng-show="$root.user.is_admin" href="#/review/{{log.id}}">
+                                                        <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
+                                                        Referral Disposition
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-switch-default="">
+                                    <span class="text-muted">{{statuses[log.status]}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,189 @@
+<div ng-show="$root.user.level >= 1" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">
+            My Account         
+        </h3>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img width="85" class="media-object img-responsive img-thumbnail" ng-src="media/uploads/{{usr.photo}}" alt="{{$root.user.first_name}} {{$root.user.last_name}}">
+                </a>
+                <div class="media-body">
+                    <h3 class="media-heading blue">
+                        {{$root.user.last_name}}, {{$root.user.first_name}} {{$root.user.middle_initial}}<br>
+                        <small>{{user_levels[$root.user.account_type]}}</small>
+                    </h3>
+                    <p class="gray txt-med">
+                        {{$root.user.email}}<br>
+                        Phone:&nbsp;{{$root.user.phone}}<br>
+                    </p>
+                </div>
+            </div>
+            <table class="table table-condensed txt-med">
+                <thead>
+                    <tr>
+                        <th colspan="2">Account Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-lock"></span>&nbsp;&nbsp;Access:</td>
+                        <td class="text-muted strong">
+                            {{$root.user.subscription}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-leaf"></span>&nbsp;&nbsp;Title:</td>
+                        <td class="text-muted">{{$root.user.title}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Member Since:</td>
+                        <td class="text-muted">{{$root.user.date_created}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table ng-show="$root.user.level >= 2" class="table table-bordered table-hover txt-med">
+                <thead>
+                    <tr>
+                        <th>Referral History</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="rstat in referrals">
+                        <td class="text-success">{{statuses[rstat.status]}}</td>
+                        <td class="strong text-muted">{{rstat.total}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a ng-show="$root.user.level >= 2" class="btn btn-success btn-sm" href="#/referrals">
+                <span class="glyphicon glyphicon-search"></span>&nbsp;
+                Browse Referrals
+            </a>
+        </div>
+        <div class="col-md-7">
+            <div class="">
+                <tabset>
+                    <tab>
+                        <tab-heading>
+                            <span class="glyphicon glyphicon-user"></span>
+                            &nbsp;Profile Details
+                        </tab-heading>
+                        <form ng-submit="onSaveProfile();" role="form" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">First Name</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" ng-model="usr.first_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">MI</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control" ng-model="usr.middle_initial">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Last Name</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" ng-model="usr.last_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Email Address</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="usr.email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Professional Title</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" ng-model="usr.account_type">
+                                        <option value="Administrator">Administrator</option>
+                                        <option value="CM/RN">CM/RN</option>
+                                        <option value="Discharge Planner">Discharge Planner</option>
+                                        <option value="Social Worker">Social Worker</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div ng-show="$root.user.level >= 2" class="form-group">
+                                <label class="col-sm-4 control-label">Phone</label>
+                                <div class="col-sm-4">
+                                    <input type="text" maxlength="10" class="form-control field-phone" ng-model="usr.phone">
+                                </div>
+                            </div>
+                            <div ng-show="$root.user.level >= 2" class="form-group">
+                                <label class="col-sm-4 control-label">Notifications Preference</label>
+                                <div class="col-sm-4">
+                                    <select ng-model="usr.notifications" class="form-control">
+                                        <option value="0">Direct Email</option>
+                                        <option value="1">SMS Text Message</option>
+                                        <option value="2">Text &amp; Email</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Profile Photo
+                                </label>
+                                <div class="col-sm-8">
+                                    <input ng-model="usr.photo" type="text" readonly="readonly" class="form-control" placeholder="upload image...">
+                                    <input type="file" ng-file-select="onFileSelect($files)">
+                                    <img ng-show="usr.photo" width="75" ng-src="media/uploads/{{usr.photo}}" class="img-thumbnail img-padded-top">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-8">
+                                    <button ng-click="submit();" class="btn btn-primary btn-sm">
+                                        <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                                        Update Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </tab>
+                    
+                    <tab>
+                        <tab-heading>
+                            <span class="glyphicon glyphicon-briefcase"></span>
+                            &nbsp;Provider Management
+                        </tab-heading>
+                        <p class="text-muted thinna txt-med">
+                            You may also approve or reject referrals on behalf of your <b>Associated 
+                                Providers</b> listed below as a <b>Case Manager</b>. You will be emailed 
+                            when a new referral for placement is submitted by another case manager 
+                            to any of these providers.
+                        </p>
+                        <div ng-show="$root.user.level >= 2" class="well-white">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">
+                                            Associated Providers<br>                                
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="fac in affiliates">
+                                        <td>
+                                            <a class="" href="#/provider/{{fac.id}}" title="{{fac.title}} Detail Page">
+                                                {{fac.title}}
+                                            </a><br>
+                                            <span class="text-muted">
+                                                {{fac.address_a}} {{fac.address_b}}, {{fac.city}} {{fac.state}}, {{fac.zip}}
+                                            </span>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>

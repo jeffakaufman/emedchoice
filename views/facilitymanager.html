@@ -1,0 +1,136 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Provider Administration</h3>
+    </div>
+    <div class="row" ng-hide="$root.user.is_admin">
+        <div class="col-md-12 text-danger">
+            <p>
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                &nbsp;Sorry, but you do not have access to this content.
+            </p>
+        </div>
+    </div>
+    <div class="row" ng-show="$root.user.is_admin">
+        <div class="col-md-2">
+            <button ng-click="create_facility_pre();" class="btn btn-primary btn-block btn-sm">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                Create a Provider
+            </button>
+            <button disabled="disabled" class="btn btn-default btn-block btn-sm">
+                <span class="glyphicon glyphicon-export"></span>&nbsp;
+                Export Providers
+            </button>
+        </div>
+        <div class="col-md-10">
+            <table ng-table="tableParams" show-filter="true" class="table">
+                <thead>
+                    <tr>
+                        <th>SID</th>
+                        <th>Provider Information</th>
+                        <th>Location</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fac in $data">
+                        <td class="text-muted">{{fac.id}}</td>
+                        <td filter="{ 'title': 'text' }">
+                            <a target="_blank" href="#/provider/{{fac.id}}" title="{{fac.title}} Detail Page">
+                                {{fac.title}}
+                            </a><br>
+                            <span class="text-muted">{{fac.info}}</span>
+                        </td>
+                        <td>
+                            <span class="text-muted">{{fac.city}}, {{fac.state}} {{fac.zip}}</span>
+                        </td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a href="#/performance/{{fac.id}}" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-dashboard"></span>
+                                </a>
+                                <a href="#/editprovider/{{fac.id}}" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger btn-xs" ng-click="remove_facility_pre(fac);">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+            </tbody></table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-remove-facility">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    Confirm Provider Removal
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this provider from the database?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button ng-click="remove_facility();" class="btn btn-danger">
+                    Yes, Remove Provider
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="modal-add-facility">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    Create a New Provider
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form ng-submit="create_facility();">
+                    <div class="form-group">
+                        <label>Provider Name</label>
+                        <input required="" ng-model="selected_facility.title" type="text" class="form-control" placeholder="Enter a provider name...">
+                    </div>
+                    <div class="form-group">
+                        <label>Zip Code</label>
+                        <input required="" ng-model="selected_facility.zip" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                            Cancel
+                        </button>
+                        <button ng-click="submit()" class="btn btn-success">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                            Create Provider
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/ng-template" id="custom/pager">
+    <ul class="pager ng-cloak">
+    <li ng-repeat="page in pages"
+    ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+    ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+    <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+    <a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+    </li>
+    <li> 
+    <div class="btn-group">
+    <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+    <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+    <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+    <button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+    </div>
+    </li>
+    </ul>
+</script>

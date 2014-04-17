@@ -1,0 +1,193 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Provider Performance Overview</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <h3>
+                {{facility.title}}
+                <a title="provider details" href="#/provider/{{facility.id}}" class="btn btn-sm">
+                    <span class="glyphicon glyphicon-align-justify"></span>
+                </a>
+                <br>
+                <small>
+                    {{facility.address_a}} {{facility.address_b}}<br>
+                    {{facility.city}}, {{facility.state}} {{facility.zip}}
+                </small>
+            </h3>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="#/performance/{{facility.id}}/#General">General</a></li>
+        <li><a href="#/performance/{{facility.id}}/#Services">Services</a></li>
+        <li><a href="#/performance/{{facility.id}}/#BedPlacement">Bed Placement</a></li>
+        <li><a href="#/performance/{{facility.id}}/#QualityOfService">Quality Of Service</a></li>
+        <li><a href="#/performance/{{facility.id}}/#ChoiceLetterHistory">Choice Letter History</a></li>
+    </ol>
+    <hr>
+    <div class="page-header">
+        <h3 class="blue">
+            <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
+            <a name="General"></a>
+            General
+        </h3>
+    </div>
+    <div class="well well-dark">
+        <div class="row statboxes">
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{history.length}}</span><br>
+                    <span class="statbox-label">Referrals from case managers</span>
+                </div>
+            </div>
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{report_hitpercentage}}%</span><br>
+                    <span class="statbox-label">How often <b>shown</b> in searches</span>
+                </div>
+            </div>
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{report_conversionpercentage}}%</span><br>
+                    <span class="statbox-label">How often <b>used</b> from searches</span>
+                </div>
+            </div>
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{facility.report_avgcloseouttime}}</span><br>
+                    <span class="statbox-label">Avg. referral closeout time (hh:mm)</span>
+                </div>
+            </div>
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{facility.report_referralsaccepted}}</span><br>
+                    <span class="statbox-label">Referrals accepted to date</span>
+                </div>
+            </div>
+            <div class="col-md-2 statbox">
+                <div>
+                    <span class="statbox-int">{{facility.report_referralsdeferred}}</span><br>
+                    <span class="statbox-label">Referrals deferred to other providers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    <div class="page-header">
+        <h3 class="blue">
+            <span class="glyphicon glyphicon-leaf"></span>&nbsp;
+            <a name='Services'></a>
+            Services
+        </h3>
+    </div>
+    <div class="well-white">
+        <div id="container" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
+    </div>-->
+    <div class="page-header">
+        <h3 class="blue">
+            <span class="glyphicon glyphicon-cloud"></span>&nbsp;
+            <a name="BedPlacement"></a>
+            Beds
+        </h3>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="2">Current Provider Constraints</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-success">Skilled Beds</td>
+                        <td class="strong">{{facility.beds_skilled}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">Medicaid Beds</td>
+                        <td class="strong">{{facility.beds_medicaid}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">Medicaid Pending Beds</td>
+                        <td class="strong">{{facility.beds_medicaid_pending}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">Charity Beds</td>
+                        <td class="strong">{{facility.beds_charity}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">Other</td>
+                        <td class="strong">{{facility.beds_other}}</td>
+                    </tr>
+                    <tr>
+                        <td class="">
+                            <b>Accomodation Rate:</b>
+                        </td>
+                        <td class="strong">{{facility.current_capacity}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8">
+            <div class="well-white">
+                <div id="container-2" style="min-width: 310px;height: 400px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="page-header">
+        <h3 class="blue">
+            <span class="glyphicon glyphicon-bookmark"></span>&nbsp;
+            <a name="QualityOfService"></a>
+            Quality Of Service
+        </h3>
+    </div>
+    <div class="well-white">
+        <div id="container-3" style="min-width: 310px;height: 250px; margin: 0 auto"></div>
+    </div>
+    <div class="page-header">
+        <h3 class="blue">
+            <span class="glyphicon glyphicon-envelope"></span>&nbsp;
+            <a name="ChoiceLetterHistory"></a>
+            Choice Letter (Referral) History&nbsp;&nbsp;
+            <small>Last 30 days. Most recent letters listed first</small>
+            <span class="pull-right text-muted">
+                <b>{{history.length}}</b> Letters Total
+            </span>
+        </h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Ref. ID</th>
+                        <th>Referral Date</th>
+                        <th>Referrer</th>
+                        <th>Referrer Address</th>
+                        <th>Service Area</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="log in history">
+                        <td class="text-muted strong">
+                            {{log.id}}
+                        </td>
+                        <td class="text-muted">
+                            {{log.date_logged}}
+                        </td>
+                        <td>
+                            {{log.referring_location}}
+                        </td>
+                        <td>
+                            <span class="text-muted">{{log.address}}</span>
+                        </td>
+                        <td class="text-muted">
+                            {{log.city}}, {{log.state}} {{log.zip}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>

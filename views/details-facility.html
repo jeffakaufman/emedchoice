@@ -1,0 +1,221 @@
+<div id="container-provider-details" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Discover Providers</h3>
+    </div>
+    <ol class="breadcrumb" ng-show="$root.user.id">
+        <li>
+            <a href="#">
+                <span class="glyphicon glyphicon-home"></span>
+                &nbsp;Home
+            </a>
+        </li>
+        <li><a href="#/providers">Discover Providers</a></li>
+        <li class="active">{{facility.title}}</li>
+    </ol>
+    <div class="row">
+        <div class="col-md-4">
+            <img err-src="http://placehold.it/468x312" ng-src="media/uploads/{{current_image}}" alt="{{facility.title}}" class="img-thumbnail">
+            <p></p>
+            <div class="row-thumbs">
+                <img alt="{{facility.title}}" err-src="http://placehold.it/86x86" ng-click="change_image(facility.image_main);" ng-src="media/uploads/{{facility.image_main}}" class="img-thumbnail img-responsive">
+
+                <img ng-hide="!facility.image_a" alt="{{facility.title}}" err-src="http://placehold.it/86x86" ng-click="change_image(facility.image_a);" ng-src="media/uploads/{{facility.image_a}}" class="img-thumbnail img-responsive">
+
+                <img ng-hide="!facility.image_b" err-src="http://placehold.it/86x86" alt="{{facility.title}}" ng-click="change_image(facility.image_b);" ng-src="{{facility.image_b}}" class="img-thumbnail img-responsive">
+
+                <img ng-hide="!facility.image_c" alt="{{facility.title}}" err-src="http://placehold.it/86x86" ng-click="change_image(facility.image_c);" ng-src="{{facility.image_c}}" class="img-thumbnail img-responsive">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <tabset justified="true">
+                <tab heading="General Information">
+                    <h3 class="red">{{facility.title}}&nbsp;</h3>
+                    <p>
+                        <span ng-show="facility.claimed" class="label label-warning label-verified">
+                            <span class="glyphicon glyphicon-ok-circle"></span> verified
+                        </span>
+                    </p>
+                    <span>{{facility.address_a}}</span>&nbsp;
+                    <br>
+                    <span>{{facility.city}}</span>, <span>{{facility.state}}</span> <span>{{facility.zip}}</span>
+                    <hr>
+                    <p class="gray">
+                        {{facility.info}}
+                    </p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-phone-alt"></span>
+                                &nbsp;&nbsp;{{facility.phone_a}}
+                            </a>
+                        </div>
+                        <div class="col-md-8">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-envelope"></span>
+                                &nbsp;&nbsp;{{facility.email}}
+                            </a>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-print"></span>
+                                &nbsp;&nbsp;{{facility.fax}}
+                            </a>
+                        </div>
+                        <div class="col-md-8">
+                            <a href="{{facility.website}}" target="_blank">
+                                <span class="glyphicon glyphicon-globe"></span>
+                                &nbsp;&nbsp;{{facility.website}}
+                            </a>
+                        </div>
+                    </div>
+                    <div ng-show="$root.user.id">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group">
+                                    <button class="btn btn-default btn-sm" ng-click="watch_item(facility.id);">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                        &nbsp;Watch
+                                    </button>                      
+                                    <button ng-click="add_placement(facility.id);" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                        &nbsp;Choices
+                                    </button>                     
+                                    <a href="#/performance/{{facility.id}}" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-dashboard"></span>
+                                        &nbsp;Performance
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="lead red">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        &nbsp;Location
+                    </p>
+                    <div class="map-holder">
+                        <leaflet markers="markers" class="map" center="center" width="100%" height="230px"></leaflet>
+                    </div>
+                </tab>
+                <tab heading="Beds Available">
+                    <p ng-show="$root.user.level >= 2" class="lead red">
+                        <span class="glyphicon glyphicon-heart-empty"></span>
+                        &nbsp;Beds Available
+                    </p>
+                    <table ng-show="$root.user.level >= 2" class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td>Skilled Beds <span class="text-muted">(Medicare and HMO/Private Insurance)</span></td>
+                                <td class="txt-stat">{{facility.beds_skilled}}</td>
+                            </tr>
+                            <tr>
+                                <td>Medicaid Beds</td>
+                                <td class="txt-stat">{{facility.beds_medicaid}}</td>
+                            </tr>
+                            <tr>
+                                <td><span>Medicaid Pending</span></td>
+                                <td class="txt-stat">{{facility.beds_medicaid_pending}}</td>
+                            </tr>
+                            <tr>
+                                <td><span>Charity</span></td>
+                                <td class="txt-stat">{{facility.beds_charity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </tab>
+                <tab heading="Insurance &amp; Services">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="well-sm">
+                                <p class="lead red">
+                                    Insurance Accepted
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="provider in facility.providers">
+                                        {{provider.title}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="well-sm">
+                                <p class="lead red">
+                                    Services We Provide
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="service in facility.services">
+                                        {{service.title}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Personnel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="well-sm">
+                                <p class="lead red">
+                                    Personnel
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="person in facility.staff|filter:staff_all">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    <b>{{person.fullname}}</b> 
+                                                    <small>{{person.title}}</small><br>
+                                                    <small>{{person.email}}</small>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div ng-show="facility.staff.length > 0" class="well-sm">
+                                <p class="lead red">
+                                    Physicians
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="person in facility.staff|filter:staff_doc">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    <b>Dr. {{person.fullname}}</b>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>    
+    <hr class="faded">
+    <div class="row">
+        <div class="col-md-7">
+
+
+
+            <div class="spacer"></div>
+        </div>
+        <div class="col-md-5">
+            <p></p>
+            <p></p>
+
+            <p></p>
+
+        </div>
+    </div>
+    <div class="spacer"></div>
+</div>

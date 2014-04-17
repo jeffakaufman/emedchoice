@@ -1,0 +1,135 @@
+<div ng-show="$root.user.level >= 1" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p class="text-center txt-writing txt-large red">
+                "Don't struggle finding your patients the care they deserve!"
+            </p>
+            <br>
+        </div>
+    </div>
+    <div class="row" style="display: none">
+        <div class="col-md-4 block-feature">
+            <h4 class="branding-gray"><span class="glyphicon glyphicon-user red"></span>&nbsp;&nbsp;Case Managers</h4>
+            <p class="text-muted">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. </p>
+            <a href="#" class="btn btn-default btn-sm">Read More
+                &nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+        <div class="col-md-4 block-feature">
+            <h4 class="branding-gray">
+                <span class="glyphicon glyphicon-home red"></span>
+                &nbsp;&nbsp;Housing Facilities
+            </h4>
+            <p class="text-muted">
+                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. 
+            </p>
+            <a href="#" class="btn btn-default btn-sm">Read More
+                &nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+        <div class="col-md-4 block-feature">
+            <h4 class="branding-gray"><span class="glyphicon glyphicon-heart red"></span>&nbsp;&nbsp;Hospitals</h4>
+            <p class="text-muted">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. </p>
+            <a href="#" class="btn btn-default btn-sm">Read More
+                &nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+    <div class="row row-testimonials" style="display: none">
+        <div class="col-md-2">        
+            <img src="images/profile.png" alt="" class="img-thumbnail pull-right">
+        </div>
+        <div class="col-md-10">
+            <blockquote>
+                <p class="txt-writing">"Lorem ipsum dolor sit amet, thisas for elit. Integer posuere erat a ante."</p>
+                <small>
+                    Dr. Sandy Nichols, Chief Pediatric Resident at 
+                    <cite class="strong" title="Source Title">Pacific Children's Hospital</cite>
+                    &nbsp;&nbsp;<a href="#" class="strong">View More Testimonials</a>
+                </small>
+            </blockquote>
+        </div>
+    </div>
+    <div class="row" style="display: none">
+        <div class="col-md-8">   
+            <div class="row">
+                <div class="col-md-12">  
+                    <h4 class="blue">Recent Facilities</h4>
+                    <div ng-repeat="loc in facilities" class="block-facility">
+                        <a href="#/provider/{{loc.id}}">
+                            <img ng-src="{{loc.image_main}}" err-src="http://placehold.it/468x312" alt="{{loc.title}}" class="img-thumbnail">
+                        </a>
+                        <br>
+                        <div class="txt-title">
+                            <a href="#/provider/{{loc.id}}">{{loc.title}}</a>
+                        </div>
+                        <p class="gray">Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for</p>
+                        <p class="text-muted">
+                            <span>{{loc.address_a}}</span>
+                            <br>
+                            <span>{{loc.city}}</span>, <span>{{loc.state}}</span> <span>{{loc.zip}}</span>
+                        </p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-default">
+                                        <span class="glyphicon glyphicon-earphone"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-default">
+                                        <span class="glyphicon glyphicon-map-marker"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"> 
+                    <hr>
+                    <a href="#/providers" class="btn btn-primary btn-sm">
+                        Facility Browser&nbsp;
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"> 
+            <div class="row">
+                <div class="col-md-12">  
+                    <h4 class="blue">Latest News</h4>
+                    <div class="block-news">
+                        <p class="txt-title">Post Title about News</p>
+                        <p class="text-muted txt-small">Nov 14th, 2013</p>
+                        <p class="gray">Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for. Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for</p>
+                    </div>
+                    <div class="block-news">
+                        <p class="txt-title">Post Title about News</p>
+                        <p class="text-muted txt-small">Nov 14th, 2013</p>
+                        <p class="gray">Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for. Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for</p>
+                    </div>
+                    <div class="block-news">
+                        <p class="txt-title">Post Title about News</p>
+                        <p class="text-muted txt-small">Nov 14th, 2013</p>
+                        <p class="gray">Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for. Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for</p>
+                    </div>
+                    <div class="block-news">
+                        <p class="txt-title">Post Title about News</p>
+                        <p class="text-muted txt-small">Nov 14th, 2013</p>
+                        <p class="gray">Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for. Lorem ipsum dolor sit amet, thisas for elit thisas for elit elit thisas for</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"> 
+                    <a href="#" class="btn btn-primary btn-sm">
+                        More Posts&nbsp;
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,173 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Patient Choice Letter</h3>
+    </div>
+    <div class="row" ng-show="facilities.length > 0">
+        <div class="col-md-4">
+            <form role="form" ng-submit="sendChoiceLetter()">
+                <div class="form-group">
+                    <label>Referrer Name</label>
+                    <input ng-model="letter.facility" required="" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Referrer Address</label>
+                    <textarea required="" ng-model="letter.address" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Payor Source</label>
+                    <select ng-model="letter.bed_type" class="form-control" ng-options="ins.id as ins.title for ins in insurances">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <input ng-model="letter.patient" required="" type="text" class="form-control" placeholder="patient's full name...">
+                </div>
+                <div class="form-group">
+                    <label>Patient's Email Address</label>
+                    <input ng-model="letter.email" type="email" class="form-control" placeholder="patient's email address...">
+                </div>
+                <div class="form-group">
+                    <label>Patient's Cell Number <span class="text-muted thinna">(ex: 2101234567)</span></label>
+                    <input ng-model="letter.phone" maxlength="10" type="text" class="form-control field-phone" placeholder="patient's phone number...">
+                </div>
+                <div class="form-group">
+                    <label>Method of Transportation</label>
+                    <select ng-model="letter.mot" class="form-control">
+                        <option value="Personal">Personal</option>
+                        <option value="Taxi">Taxi</option>
+                        <option value="Must Provide">Must Provide</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div ng-show="letter.mot=='Other'">
+                        <br>
+                        <textarea class="form-control" ng-model="letter.mot_other" placeholder="Please provide additional transportation details..."></textarea>  
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button ng-disabled="processing" ng-click="submit()" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;
+                        <span ng-hide="processing">Send Letter</span>
+                        <span ng-show="processing">Please wait...</span>
+                    </button>                    
+                    <a href="#/choices" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                        Edit Choices
+                    </a>
+                    <a href="#/choices" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        &nbsp;Cancel
+                    </a>
+                </div>
+            </form>
+            <div class="spacer"></div>
+        </div>
+        <div class="col-md-8">
+            <ol class="breadcrumb">
+                <li class="active">
+                    <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
+                    Patient Letter Preview
+                </li>
+            </ol>
+            <div id="letter-body" class="well-white letter-body printable">
+                <address>
+                    <h4 class="strong" ng-bind="letter.facility"></h4>
+                    <span ng-bind="letter.address"></span><br>
+                    <span class="text-muted" ng-bind="letter.date_created"></span>
+                </address>
+                <hr>
+                <p>
+                    Dear <span ng-bind="letter.patient" class="strong"></span> and Family:
+                </p>
+                <p>
+                    Your physician has ordered/recommended additional or continued services after you leave the hospital or inpatient treatment setting.
+                </p>
+                <p>
+                    You have the right to select any provider to provide the care ordered/recommended by your physician. <b>This is your choice</b>. If you need more information before making this decision, please ask our Discharge Planning Staff who will be happy to assist and provide you with alternatives. A list of providers who have asked the hospital to be so listed is available for your review below.
+                </p>
+                <p>
+                    Because we are unfamiliar with the policies and procedures of any of the other providers, nor whether or not they actually service the area where you live, we cannot make any recommendations concerning them. Your provider of choice should be verified by you with the managed care organization responsible for your benefit management, as necessary.
+                </p>
+                <p class="strong">
+                    Patient or Family, Please check one of the following:
+                </p>
+                <div>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="fac in facilities">
+                            <div class="checkbox">
+                                <label>
+                                    <input disabled="disabled" type="checkbox" name="choice" id="cb-{{fac.id}}">
+                                    <b>{{fac.title}}</b><br>
+                                    {{fac.address_a}} {{fac.address_b}}, {{fac.city}} {{fac.state}} {{fac.zip}}<br>
+                                    {{fac.phone_a}}
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <label>
+                                    <input disabled="disabled" type="checkbox" name="choice" id="cb-other">
+                                    Other: _______________________________________________
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            Patient Signature: ____________________
+                        </li>
+                        <li>
+                            Date: ____________________
+                        </li>
+                        <li>
+                            Family Member/Guardian Signature: ____________________
+                        </li>
+                        <li>
+                            Relationship: ____________________
+                        </li>
+                        <li>
+                            Date: ____________________
+                        </li>
+                    </ul>
+                </div>
+                <hr>
+                <p class="strong">
+                    Caution: the listed providers for this service may or may not be Medicare certified and/or an approved provider for your insurance benefit plan.
+                </p>
+                <p class="rev">REV: PCL 001</p>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-hide="facilities.length > 0">
+        <div class="col-md-12">
+            You do not have any facilities selected.
+        </div>
+    </div>
+    <div class="spacer"></div>
+</div>
+<div class="modal fade" id="modal-letter-status" tabindex="-1" role="dialog" aria-labelledby="modal-letter-statusLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modal-letter-statusLabel">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Choice Letter Processed
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p class="lead">A pdf copy of the choice letter has been emailed to you and <span ng-bind="letter.patient"></span> or their designated contact.  The selected service providers have been notified of your referral
+                </p>
+                <hr>
+                <p>
+                    You may download a copy of the patient choice letter below:
+                </p>
+                <p>
+                    <a target="_blank" ng-href="{{status.letter_file}}" class="">
+                        <span class="glyphicon glyphicon-download"></span>&nbsp;
+                        Download Choice Letter
+                    </a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

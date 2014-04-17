@@ -1,0 +1,54 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">My Placements</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>The placements listed below are all sample, hard-coded data.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well-white">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="nr">Date Due</th>
+                            <th>Facility Information</th>
+                            <th>Primary Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="placement in placements">                         
+                            <td class="text-muted nr">
+                                {{placement.date_due}}
+                            </td>
+                            <td class="nr">
+                                <a href="#/facility/{{placement.facility.id}}" class="">
+                                    {{placement.facility.title}}
+                                </a>
+                            </td>
+                            <td class="text-muted">{{placement.primary_info}}</td>                  
+                            <td class="nr">
+                                <button ng-click="onCall(placement.facility);" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-phone-alt"></span>
+                                </button>
+                                <button ng-click="onEdit(placement.facility);" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button ng-click="onRemove(placement.facility);" class="btn btn-danger btn-xs">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="spacer">
+
+        </div>
+    </div>
+</div>

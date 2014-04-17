@@ -1,0 +1,136 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Placement Review</h3>
+    </div>
+    <h4 ng-show="validation.error" class="text-warning">
+        <span class="glyphicon glyphicon-lock"></span>
+        {{validation.title}}
+    </h4>
+    <h4 ng-hide="validation.error" class="text-success">
+        <span class="glyphicon glyphicon-ok"></span>
+        {{validation.title}}
+    </h4>
+    <p class="text-muted">{{validation.msg}}</p>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="well-white" ng-hide="validation.error">
+                <p>
+                    <span class="text-muted">Date: {{validation.facility.date_logged}}</span>
+                </p>
+                <p>
+                    <b>{{validation.facility.fac_title}},</b>
+                </p>
+                <p>
+                    {{validation.facility.referring_location}} in {{validation.facility.city}}, {{validation.facility.state}}  has requested a prospective patient placement. If you can accommodate this placement then please update the referral request to the right with your decision and notes.
+                </p>
+                <p>
+                    Thank You,<br>
+                    <span class="text-muted">eMedChoice Provider Services&trade;</span>
+                </p>
+            </div>
+            <div class="well-white" ng-hide="validation.error">
+                <table class="table table-stats">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Referral Request Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Referrer</td>
+                            <td>
+                                {{validation.facility.referring_location}}<br>
+                                <span class="text-muted">
+                                    {{validation.facility.address}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Patient</td>
+                            <td>
+                                {{validation.facility.patient}}<br>
+                                <span class="text-muted">
+                                    {{validation.facility.email}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Payor Source</td>
+                            <td>{{beds[validation.facility.bed_type]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Appt. Scheduled</td>
+                            <td>{{validation.facility.time_when}}</td>
+                        </tr>
+                        <tr>
+                            <td>Case Manager</td>
+                            <td>
+                                {{validation.facility.first_name}} {{validation.facility.last_name}}<br>
+                                <span class="text-muted">
+                                    <span class="glyphicon glyphicon-phone"></span>&nbsp;
+                                    {{validation.facility.phone}}<br>
+                                    <span class="glyphicon glyphicon-envelope"></span>&nbsp;
+                                    {{validation.facility.email}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form ng-hide="validation.error" ng-submit="process_review();" role="form">                
+                <div class="form-group">
+                    <label>Referral Request Decision</label>
+                    <p></p>
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="validation.facility.status" name="status" value="1"> 
+                        <b class="text-success">Accept</b>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="validation.facility.status" name="status" value="2"> 
+                        <b class="text-warning">Deny</b>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="validation.facility.status" name="status" value="3"> 
+                        Archive
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="validation.facility.status" name="status" value="0"> 
+                        Pending
+                    </label>
+                </div> 
+                <hr>
+                <div class="form-group">      
+                    <div id="facility_notes_label" class="alert alert-danger fade in">
+                        <strong>Notice!</strong> Please provide a reason for your decision below.
+                    </div>              
+                    <label>Denial Reason</label>
+                    <select ng-disabled="validation.facility.status != 2" ng-model="validation.denial_reason" class="form-control">
+                        <option value="">Select a reason...</option>
+                        <option value="Clinical">Clinical</option>
+                        <option value="Financial">Financial</option>
+                        <option value="Beds Not Available">Beds Not Available</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Provider Notes</label>
+                    <textarea required="" id="facility_notes" placeholder="Depending on your decision above, this field may be required..." ng-model="validation.facility.notes" class="form-control facility_notes" rows="5"></textarea>
+                </div>
+                <button ng-click="submit()" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok-circle"></span>
+                    &nbsp;Update Referral Request
+                </button>
+            </form>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    <a href="#/referrals" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;
+        Return to Referrals
+    </a>
+</div>
+<div class="spacer"></div>

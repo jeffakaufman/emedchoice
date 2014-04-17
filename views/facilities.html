@@ -1,0 +1,153 @@
+<div ng-show="$root.user.level >= 1" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">Discover Providers</h3>
+    </div>
+    <ol class="breadcrumb" ng-show="$root.user.token">
+        <li>
+            <a href="#">
+                <span class="glyphicon glyphicon-home"></span>
+                &nbsp;Home
+            </a>
+        </li>
+        <li><a href="#/providers">Discover Providers</a></li>
+        <li class="active"><b ng-bind="search.location.zip"></b></li>
+    </ol>
+    <div class="row" ng-show="$root.user.token">
+        <div class="col-md-4">
+            <div class="well">
+                <p class="strong">
+                    <span class="glyphicon glyphicon-search"></span>&nbsp;
+                    Advanced Search
+                </p>
+                <div class="map-holder">
+                    <leaflet class="map" center="center" width="100%" height="130px"></leaflet>
+                </div>
+                <p></p>
+                <form class="form-inline form-search" role="form">
+                    <div class="form-group">
+                        <label class="sr-only" for="searchloc"></label>
+                        <input type="text" maxlength="5" class="form-control" id="searchloc" ng-model="search.location.zip" placeholder="Enter your zip code...">
+                    </div>
+                    <button ng-click="onUpdateZip();" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    <img id="img-search-loader" ng-src="images/ajax-loader.gif">
+                    <p></p>
+                    <label>
+                        <input ng-model="search.do_proximity_search" type="checkbox">
+                        Enable Proximity Search
+                    </label>
+                    <select ng-disabled="!search.do_proximity_search" ng-model="search.location.distance" class="form-control">
+                        <option value="5">5 miles</option>
+                        <option value="10">10 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="100">100 miles</option>
+                    </select>
+                    <p></p>
+                    <label>Payor Source</label>
+                    <select class="form-control" ng-model="search.provider" ng-options="ins.id as ins.title for ins in insurances">
+                    </select>
+                    <p></p>
+                    <label>Filter by Doctor's or Personnel</label>
+                    <input type="text" maxlength="20" class="form-control" ng-model="search.staff" placeholder="Enter a name...">
+                    <p></p>
+                    <label>Service Category</label>
+                    <br>
+                    <select class="form-control" ng-model="search.service_group" ng-options="srvg.id as srvg.title for srvg in service_groups">
+                        <option value="">Select a Category...</option>
+                    </select>
+                    <p></p>
+                    <label>Select Sub-Services</label>
+                    <br>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="srv in services" ng-animate="'animate'">
+                            <label>
+                                <input ng-model="search.services[srv.id]" type="checkbox" ng-click="onToggleService($event, srv);">
+                                <span class="lbl">{{srv.title}}</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button ng-click="onUpdateZip();" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span>
+                        &nbsp;Update Search
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8 no-results" ng-show="!facilities">
+            <div class="alert alert-warning fade in">
+                <strong>No Providers Found!</strong>&nbsp;
+                Sorry, but we could not locate a facility with the criteria you provided.
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row search-results" ng-hide="!facilities">
+                <div class="col-md-12">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Found
+                    <span class="strong">{{facilities.length}}</span> providers near <b>{{search.location.zip}}</b>.
+                </div>
+            </div>
+            <div ng-show="facilities">
+                <pagination total-items="pageCount" page="currentPage" max-size="maxSize" class="pagination-sm pull-right padded-float-left" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                <div class="well-white">
+                    <table class="table table-hover table-imagebox">
+                        <thead>
+                            <tr>
+                                <th>Provider Information</th>
+                                <th ng-show="$root.user.level >= 2">Choice Letter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="loc in filtered_facilities">
+                                <td>
+                                    <div class="img-thumbnail-holder">
+                                        <img ng-src="media/uploads/{{loc.image_main}}" err-src="http://placehold.it/90x70" alt="{{loc.title}}" class="img-thumbnail img-responsive">
+                                    </div>
+                                    <a class="strong" href="#/provider/{{loc.id}}">{{loc.title}}</a>
+                                    <div class="div-tablerowinfo">
+                                        <span class="txt-med">{{loc.address_a}}&nbsp;{{loc.city}}, {{loc.state}} {{loc.zip}}</span>
+                                        <span class="text-success txt-med">
+                                            <br>
+                                            <span class="glyphicon glyphicon-phone text-muted"></span>
+                                            {{loc.phone_a}}
+                                        </span>
+                                        <span class="txt-med text-muted">
+                                            <br>
+                                            <span ng-show="$root.user.level >= 2">
+                                                Beds: <b class="text-success">{{loc.beds_open}}</b>
+                                                <br>
+                                            </span>
+                                            Distance (mi): <b class="text-success">{{loc.distance}}</b>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td ng-show="$root.user.level >= 2"><cbchoices class="pull-left" ng-click="showPcl()" choice="{{loc.id}}"></cbchoices></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <pagination total-items="pageCount" page="currentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-map">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="map-holder">
+                        <leaflet class="map" center="center" width="528" height="300px"></leaflet>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>

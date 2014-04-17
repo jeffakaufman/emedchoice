@@ -1,0 +1,450 @@
+<div ng-show="$root.user.level >= 3" class="container container-editfacility" ng-init="init();">
+    <div class="page-header">
+        <h3 class="text-muted">
+            <a href="#/providermanager">Provider Management</a>
+            &nbsp;/&nbsp;
+            Provider #{{facility.id}}
+        </h3>
+    </div>
+    <div class="row" ng-hide="$root.user.is_admin">
+        <div class="col-md-12 text-danger">
+            <p>
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                &nbsp;Sorry, but you do not have access to this content.
+            </p>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" ng-show="$root.user.is_admin">
+        <li class="active"><a href="#details" data-toggle="tab">
+                <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                Primary Details</a></li>
+        <li><a href="#services" data-toggle="tab">
+                <span class="glyphicon glyphicon-cloud"></span>&nbsp;
+                Services Provided</a></li>
+        <li><a href="#insurances" data-toggle="tab">
+                <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                Insurances Accepted</a></li>
+        <li><a href="#staff" data-toggle="tab">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;
+                Assigned Personnel</a></li>
+    </ul>
+    <div class="tab-content" ng-show="$root.user.is_admin">
+        <div class="tab-pane fade in active" id="details">
+            <form ng-submit="save_facility();">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Provider Name</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.title" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Program Type</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.type" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Info</label>
+                            <div class="col-sm-9">
+                                <textarea ng-model="facility.info" rows="4" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Address A</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.address_a" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Address B</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.address_b" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Phone A</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.phone_a" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Phone B</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.phone_b" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Fax</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.fax" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.email" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Website</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.website" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">City</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.city" type="text" class="form-control" required="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">State</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.state" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Zip</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.zip" type="text" class="form-control" required="">
+                            </div>
+                        </div>                  
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Ambulance Service</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.ambulance" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <hr>
+                                <p class="form-control-static text-muted">Beds Available</p>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Skilled</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.beds_skilled" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medicaid</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.beds_medicaid" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medicaid (P)</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.beds_medicaid_pending" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Charity</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.beds_charity" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Main Photo
+                            </label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.image_main" type="text" readonly="readonly" class="form-control" placeholder="upload image...">
+                                <input type="file" ng-file-select="onFileSelect($files,'image_main')">
+                                <img ng-show="facility.image_main" width="75" ng-src="media/uploads/{{facility.image_main}}" class="img-thumbnail img-padded-top">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Photo A</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.image_a" type="text" class="form-control" readonly="readonly" placeholder="upload image...">
+                                <input type="file" ng-file-select="onFileSelect($files,'image_a')">
+                                <img ng-show="facility.image_a" width="75" ng-src="media/uploads/{{facility.image_a}}" class="img-thumbnail img-padded-top">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Photo B</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.image_b" type="text" class="form-control" readonly="readonly" placeholder="upload image...">
+                                <input type="file" ng-file-select="onFileSelect($files,'image_b')">
+                                <img ng-show="facility.image_b" width="75" ng-src="media/uploads/{{facility.image_b}}" class="img-thumbnail img-padded-top">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Photo C
+                            </label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.image_c" type="text" class="form-control" readonly="readonly" placeholder="upload image...">
+                                <input type="file" ng-file-select="onFileSelect($files,'image_c')">
+                                <img ng-show="facility.image_c" width="75" ng-src="media/uploads/{{facility.image_c}}" class="img-thumbnail img-padded-top">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Video URL</label>
+                            <div class="col-sm-9">
+                                <input ng-model="facility.video_url" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-0 col-sm-12">
+                                <hr>
+                                <button ng-click="submit();" class="btn btn-success btn-lg pull-right">
+                                    Save Primary Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="services">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="scroller">
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Conventional Services</th>
+                                    <th>
+                                        <button class="btn btn-success btn-xs pull-right" ng-click="create_service_pre();">
+                                            Create Service
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-hide="srv.id|serviceProvided:facility.services" ng-repeat="srv in services">
+                                    <td>{{srv.title}} <span class="text-muted pull-right txt-med">{{srv.group}}</span></td>
+                                    <td>
+                                        <button class="btn btn-default btn-xs pull-right" ng-click="add_service(srv);">
+                                            <span class="glyphicon glyphicon-arrow-right"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Services Provided</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="fsrv in facility.services">
+                                <td class="text-success">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;
+                                    {{fsrv.title}}
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-xs pull-right" ng-click="remove_service(fsrv);">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="insurances">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Available Insurances</th>
+                                <th>
+                                    <button class="btn btn-success btn-xs pull-right" ng-click="create_provider_pre();">
+                                        Create Insurance
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-hide="aprovider.id|insurancesAccepted:facility.providers" ng-repeat="aprovider in providers">
+                                <td>{{aprovider.title}}</td>
+                                <td>
+                                    <button class="btn btn-default btn-xs pull-right" ng-click="add_provider(aprovider);">
+                                        <span class="glyphicon glyphicon-arrow-right"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Insurances Accepted</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="provider in facility.providers">
+                                <td class="text-success">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;
+                                    {{provider.title}}
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-xs pull-right" ng-click="remove_provider(provider);">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="staff">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Add Personnel</h3>
+                    <form ng-submit="add_user()" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Title</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" ng-model="staff.title">
+                                    <option value="">Select a title...</option>
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Admissions">Admissions</option>
+                                    <option value="Affiliated Physician">Affiliated Physician</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Medical Director">Medical Director</option>
+                                    <option value="Regional">Regional</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Fullname</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" ng-model="staff.fullname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Receive SMS Messages</label>
+                            <div class="col-sm-3">
+                                <select ng-model="staff.receive_sms" class="form-control">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Phone Number</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" ng-model="staff.phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" ng-model="staff.email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-10">
+                                <button ng-click="submit()" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                                    Add Personnel
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Assigned Personnel</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="user in facility.staff">
+                                <td>
+                                    {{user.fullname}}<br>
+                                    <span class="text-muted">{{user.title}}</span><br>
+                                    <span ng-show="user.receive_sms" class="text-success txt-med">
+                                        <span class="glyphicon glyphicon-phone"></span>
+                                        Receives SMS Messages
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-xs pull-right" ng-click="remove_user(user);">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>
+<div class="modal fade" id="modal-create-service" ng-show="$root.user.is_admin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create a New Service</h4>
+            </div>
+            <div class="modal-body">
+                <form ng-submit="create_service();">
+                    <div class="form-group">
+                        <label>Service Title</label>
+                        <input required="" ng-model="service.title" type="text" class="form-control" placeholder="enter a title for your service...">
+                    </div>
+                    <button class="btn btn-default" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                        Cancel
+                    </button>
+                    <button ng-click="submit()" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                        Create Service
+                    </button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="modal-create-provider" ng-show="$root.user.is_admin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create a New Insurance</h4>
+            </div>
+            <div class="modal-body">
+                <form ng-submit="create_provider();">
+                    <div class="form-group">
+                        <label>Insurance Title</label>
+                        <input required="" ng-model="provider.title" type="text" class="form-control" placeholder="enter a title for your insurances...">
+                    </div>
+                    <button class="btn btn-default" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                        Cancel
+                    </button>
+                    <button ng-click="submit()" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                        Create Insurance
+                    </button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

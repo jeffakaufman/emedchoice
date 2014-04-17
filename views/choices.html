@@ -1,0 +1,44 @@
+<div ng-show="$root.user.level >= 2" class="container" ng-init="init();">
+    <div class="page-header">
+        <h3 class="blue">My Choices</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="nr">Facility Information</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-show="facilities.length < 1"> 
+                        <td colspan="3" class="text-muted">No facilities selected.</td>
+                    </tr>
+                    <tr ng-repeat="loc in facilities">    
+                        <td class="">
+                            <a href="#/provider/{{loc.id}}">
+                                {{loc.title}}
+                            </a><br>
+                            <span class="text-muted">
+                                {{loc.address_a}} - {{loc.city}} {{loc.state}}, {{loc.zip}}
+                            </span>
+                        </td>   
+                        <td class=""></td>   
+                        <td class="">
+                            <button ng-click="on_remove(loc.id)" class="btn btn-default btn-xs pull-right">
+                                remove
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a ng-show="facilities.length > 0" href="#/patientletter" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-envelope"></span>&nbsp;
+                Create Patient Choice letter
+            </a>
+        </div>
+    </div>
+    <div class="spacer"></div>
+</div>
